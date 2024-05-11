@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <% if (req.query.error === 'message') { %>
+    <p class="error-message"><%= req.query.error %> Please try again.</p>
+  <% } %>
+
+  <form action="POST" action="/login">
+    <label for="userInput">Username: </label>
+    <input type="text" name="userInput" placeholder="Username">
+    <label for="pwdInput">Password: </label>
+    <input type="text" name="pwdInput" placeholder="Password">
+    <button type="submit">Login</button>
+  </form>
+
+  <p>New user?</p>
+  <a href="/newuser">Create Account</a>
+</body>
+</html>

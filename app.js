@@ -1,10 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const { localStrategy } = require('./yourLocalStrategyFile.js');
-const db = require('./database.js');
+const router = require('./router')
+
 const MongoStore = require('connect-mongo')(session);
-require('./config/passport');
+const db = require('./config/database');
 
 // create express app
 const app = express();
@@ -29,9 +29,8 @@ app.use(session({
     } 
 }));
 
-// passport authentication
+app.use(passport.initialize());
 app.use(passport.session());
-passport.use(localStrategy);
 
 app.use((req, res, next) => {
     console.log(req.session);
@@ -39,8 +38,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// routes
-app.get("/", (req, res) => res.render("index"));
+// mount the router
+app.use('/', router);
 
 // server
 app.listen(3000, () => console.log("app listening on port 3000!"));
