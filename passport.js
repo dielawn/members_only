@@ -1,9 +1,8 @@
-const passport = require("passport");
 const bcrypt = require('bcrypt');
 const LocalStrategy = require("passport-local").Strategy;
-import { User } from "./userSchema";
+const { User } = require('./userSchema');
 
-passport.use(new LocalStrategy(
+const localStrategy = new LocalStrategy(
     async function(username, password, done) {
         try {
             const user = await User.findOne({ username: username });
@@ -19,4 +18,8 @@ passport.use(new LocalStrategy(
             return done(err);
         }
     }
-));
+);
+
+module.exports = {
+    localStrategy: localStrategy
+};
