@@ -1,57 +1,39 @@
 const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt')
-const { body, validationResult } = require('express-validator')
+const { validationResult } = require('express-validator')
 const authMiddleware = require('./authMiddleware');
+const validateNewUser = require('./controllers/createUserController').createUser;
+require('./strategy').loginStrategy;
+require('./strategy').memberStrategy;
+const Message = require('./schemas/messageSchema')
 
 
-// login
+// login inputs w/link to create acct
 router.get('/', (req, res) => res.render('index'));
 router.get('/login', (req, res) => res.render('index'));
-
+// fails to login w/error or success redirects to user protected route
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', { 
+    passport.authenticate('loginStrategy', { 
         failureRedirect: '/login?error=message' 
     })(req, res, next);
 }, (req, res) => {
-    console.log('login success')
-    res.redirect('/login-success');
+    res.redirect('/user');
 });
 
-
 // register new user
-router.post('/register', 
-    body('username')
-        .trim().isLength({ min: 3 }).withMessage('Username must be at least 3 characters.'),
-    body('password')
-        .trim()
-        .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
-        .matches(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[A-Za-z0-9!@#$%^&*()_+]+$/)
-            .withMessage('Password must contain at least one uppercase letter, one number, and one special character')
-        .matches(/^(?=.*[A-Z])/).withMessage('At least one uppercase letter is required.')
-        .matches(/^(?=.*[0-9])/).withMessage('At least one number is required.')
-        .matches(/^(?=.*[!@#$%^&*()_+])/).withMessage('At least one special character is required.'),
-    body('confirmPwd')
-        .custom((value, { req }) => {
-            if (value !== req.body.password) {
-                throw new Error('Passwords do not match');
-            }
-            return true;
-        }),
-
-    async (req, res, next) => {
+router.post('/register', validateNewUser, async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
-        }
-            
+        }            
         try {
             const hash = await bcrypt.hash(req.body.password, 10);
         
             const newUser = new User({
                 username: req.body.username,
                 password: hash,
-                admin: true,
+                member: true,
             });
             
             // save new user to database
@@ -70,9 +52,28 @@ router.post('/register',
         }
 });
 
- // protected route
+ // protected routes
  router.get(`/user`, authMiddleware, (req, res) => {
-    res.render('user')
- })
+    const user = req.user;
+    res.render('user', { user: user})
+ });
+
+
+ //read all messages by all authors
+ router.get('/members', 
+ passport.authenticate('memberStrategy', {
+     failureRedirect:'/signup?error=message'
+ }),
+ async (req, res) => {
+     try {
+         const allMessages = await Message.find().populate('author').sort('timestamp');
+         res.render('members', { messages: allMessages });
+     } catch (error) {
+         console.error('Error retrieving messages:', error);
+         res.status(500).send('Internal Server Error');
+     }
+ }
+);
+
 
 
