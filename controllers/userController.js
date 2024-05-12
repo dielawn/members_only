@@ -10,7 +10,7 @@ require('./strategy').memberStrategy;
 //GET login page
 exports.get_login = (req, res) => res.render('index')
 //POST authenticate login
-exports.post_login = (req, res, next) => {
+exports.login = (req, res, next) => {
     passport.authenticate('loginStrategy', { 
         failureRedirect: '/login?error=message' 
     })(req, res, next);

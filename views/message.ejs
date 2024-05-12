@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message</title>
+</head>
+<body>
+    <h1><%= message.author %></h1>
+    <p><%= message.message %></p>
+    <p><%= message.createdAt %></p> 
+    <p><%= message.likes %></p>
+    <form method="POST" action="update_likes"><button type="submit">👍</button></form>       
+    <button onclick="toggleHide()"><%= message.replies.length %></button>
+    <form class="hide" id="replyForm" method="POST" action="update_replies">
+        <label for="messageInput">New Reply: </label>
+        <textarea name="messageInput" id="messageInput"></textarea>
+        <button type="submit">Reply</button>
+    </form>
+    <!-- if replies list them -->
+    <% if (message.replies.length > 0) { %> 
+        <% message.replies.forEach(reply => { %> 
+            <div>
+                <p><strong>Author:</strong> <%= reply.author.username %></p>
+                <p><strong>Message:</strong> <%= reply.message %></p>
+                <p><strong>Timestamp:</strong> <%= reply.createdAt %></p>
+                <p><strong>Likes:</strong> <%= reply.likes %></p>
+                <p><strong>Replies:</strong> <%= reply.replies.length %></p>
+            </div>
+        <% }); %>
+    <% } %>
+    <script>
+        function toggleHide() {
+             document.getElementById('replyForm').classList.toggle('hide');            
+        }
+    </script>
+</body>
+</html>

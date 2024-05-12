@@ -9,10 +9,18 @@
     <h1>Welcome <%= req.user.username %></h1>
 
     <!-- list member messages -->
-    <!-- message author -->
-    <!-- reply to message form -->
+    <% messages.forEach(message => { %>
+        <div>
+            <p><strong>Author:</strong> <%= message.author.username %></p>
+            <p><strong>Message:</strong> <%= message.message %></p>
+            <p><strong>Timestamp:</strong> <%= message.createdAt %></p>
+            <p><strong>Likes:</strong> <%= message.likes %></p>
+            <p><strong>Replies:</strong> <%= message.replies.length %></p>
+        </div>
+        <hr>
+    <% }); %>   
 
-    <form action="POST" action="create_message">
+    <form method="POST" action="create_message">
         <label for="messageInput">New Message: </label>
         <textarea name="messageInput" id="messageInput"></textarea>
         <button type="submit">Post Member Message</button>

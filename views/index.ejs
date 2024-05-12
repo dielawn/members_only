@@ -10,7 +10,7 @@
     <p class="error-message"><%= req.query.error %> Please try again.</p>
   <% } %>
 
-  <form action="POST" action="/login">
+  <form method="POST" action="login">
     <label for="userInput">Username: </label>
     <input type="text" name="userInput" placeholder="Username">
     <label for="pwdInput">Password: </label>
