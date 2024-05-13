@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Become a member</title>
+    <title>Become a Member</title>
 </head>
 <body>
-    <h1>Members can post and reply to posts!</h1>
-    <form action="POST">
-        <label for="memberCB"></label>
-        <input type="checkbox" name="memberCB">
+    <h1>Become a Member</h1>
+    <p>Members can post and reply to posts!</p>
+    <form method="POST" action="update_membership">
+        <label for="memberCB">Check this box to become a member:</label>
+        <input type="checkbox" id="memberCB" name="memberCB">
         <button type="submit">Save</button>
     </form>
 </body>
