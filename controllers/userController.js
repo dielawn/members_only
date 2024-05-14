@@ -1,11 +1,8 @@
-const { body } = require('express-validator')
-
+const { body, validationResult } = require('express-validator')
 const passport = require('passport');
 const bcrypt = require('bcrypt')
-const { validationResult } = require('express-validator')
 
 require('./strategy').loginStrategy;
-require('./strategy').memberStrategy;
 
 //GET login page
 exports.get_login = (req, res) => res.render('index')

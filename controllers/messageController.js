@@ -1,4 +1,4 @@
-const { body } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const Message = require('./schemas/messageSchema')
 const passport = require('passport');
 require('./strategy').memberStrategy;
