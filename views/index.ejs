@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Login Page</title>
+  <style>
+    .error-message {
+      color: red;
+    }
+  </style>
 </head>
 <body>
   <h1>Login</h1>
-  <% if (req.query.error === 'message') { %>
-    <p class="error-message"><%= req.query.error %> Please try again.</p>
-  <% } %>
+  
 
-  <form method="POST" action="login">
+  <form method="POST" action="/login">
     <label for="userInput">Username: </label>
-    <input type="text" name="userInput" placeholder="Username">
+    <input type="text" id="userInput" name="username" placeholder="Username" required>
     <label for="pwdInput">Password: </label>
-    <input type="text" name="pwdInput" placeholder="Password">
+    <input type="password" id="pwdInput" name="password" placeholder="Password" required>
     <button type="submit">Login</button>
   </form>
 

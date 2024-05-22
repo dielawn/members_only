@@ -2,9 +2,10 @@
   "name": "members_only",
   "version": "1.0.0",
   "description": "Passport authentication project",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "start"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -18,12 +19,18 @@
   "homepage": "https://github.com/dielawn/members_only#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "express-validator": "^7.1.0",
+    "mongodb": "^6.6.2",
     "mongoose": "^8.3.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

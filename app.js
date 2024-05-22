@@ -1,23 +1,24 @@
 const express = require("express");
 const session = require("express-session");
-const passport = require("passport");
-const router = require('./router')
-
-const MongoStore = require('connect-mongo')(session);
+const passport = require("./config/passport"); // Adjust the path as necessary
+const router = require('./router');
+const MongoStore = require('connect-mongo');
 const db = require('./config/database');
+const path = require('path');
+require('dotenv').config();
 
 // create express app
 const app = express();
 
 // views
-app.set("views", __dirname);
+app.set("views", path.join(__dirname, "views"));  // Ensure the views directory is set correctly
 app.set("view engine", "ejs");
 
 // general setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const sessionStore = new MongoStore({ mongooseConnection: db, collection: 'sessions'});
+const sessionStore = MongoStore.create({ mongoUrl: process.env.DB_STRING, collectionName: 'sessions' });
 
 app.use(session({ 
     secret: process.env.SECRET, 

@@ -1,6 +1,7 @@
+const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require("passport-local").Strategy;
-const { User } = require('./schemas/userSchema');
+const User = require('../schemas/userSchema'); // Import the User model
 
 const loginStrategy = new LocalStrategy(
     async function(username, password, done) {
@@ -8,13 +9,13 @@ const loginStrategy = new LocalStrategy(
             const user = await User.findOne({ username: username });
             if (!user) {
                 return done(null, false, { message: 'Incorrect username' });
-            };
-            const match = await bcrypt.compare(password, user.password)
+            }
+            const match = await bcrypt.compare(password, user.password);
             if (!match) {
-                return done(null, false, { message: 'Incorrect password' })
-            };
+                return done(null, false, { message: 'Incorrect password' });
+            }
             return done(null, user);
-        } catch(err) {
+        } catch (err) {
             return done(err);
         }
     }
@@ -26,20 +27,18 @@ const memberStrategy = new LocalStrategy(
             const user = await User.findOne({ username: username });
             if (!user) {
                 return done(null, false, { message: 'Incorrect username' });
-            }            
-            const isMember = user.member;
-            if (isMember) {
-                // Successful authentication return user object
+            }
+            if (user.member) {
                 return done(null, user);
             } else {
-                // User is not a member, return false authentication failed
                 return done(null, false, { message: 'Sign up!' });
             }
-        } catch(err) {
+        } catch (err) {
             return done(err);
         }
     }
 );
+
 
 
 

@@ -6,14 +6,16 @@
 </head>
 <body>
   <h1>Create account</h1>
-  <form method="POST" action="create_user">
+  <form method="POST" action="/register">
     <label for="username">Username: </label>
     <input type="text" name="username" placeholder="Username">
     <label for="password">Password: </label>
-    <input type="text" name="password" placeholder="Password">
+    <input type="password" name="password" placeholder="Password">
     <label for="confirmPwd">Password confirm: </label>
-    <input type="text" name="confirmPwd" placeholder="Password">
-    <button type="submit">Login</button>
+    <input type="password" name="confirmPwd" placeholder="Password">
+    <label for="member">Enable Posting</label>
+    <input type="checkbox" id="member" name="member">
+    <button type="submit">Register</button>
   </form>
   <p>Have an account?</p>
   <a href="/">Login</a>
