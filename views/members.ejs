@@ -6,7 +6,7 @@
     <title>Members Message Board</title>
 </head>
 <body>
-    <h1>Welcome <%= req.user.username %></h1>
+    <h1>Welcome <%= user.username %></h1>
 
     <!-- list member messages -->
     <% messages.forEach(message => { %>
@@ -20,7 +20,7 @@
         <hr>
     <% }); %>   
 
-    <form method="POST" action="create_message">
+    <form method="POST" action="/members">
         <label for="messageInput">New Message: </label>
         <textarea name="messageInput" id="messageInput"></textarea>
         <button type="submit">Post Member Message</button>

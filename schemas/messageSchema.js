@@ -1,13 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-const User = require("./userSchema");
 
 const messageSchema = new Schema({
     message: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    replies: { type: Array },
-    likes: { type: Number },
-}, { timestamps: true });
+    createdAt: { type: Date, default: Date.now },
+    likes: { type: Number, default: 0 },
+    replies: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
+});
 
-module.exports = mongoose.model('Message', messageSchema)
+const Message = mongoose.model('Message', messageSchema);
+
+module.exports = Message;

@@ -1,5 +1,6 @@
 const passport = require('passport');
 const { loginStrategy, memberStrategy } = require('./strategy')
+const { User } = require('../schemas/userSchema'); 
 
 // Use the login strategy
 passport.use('loginStrategy', loginStrategy);

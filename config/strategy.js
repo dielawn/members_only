@@ -1,7 +1,7 @@
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const LocalStrategy = require("passport-local").Strategy;
-const User = require('../schemas/userSchema'); // Import the User model
+const User = require('../schemas/userSchema'); // Ensure this path is correct
 
 const loginStrategy = new LocalStrategy(
     async function(username, password, done) {
@@ -38,9 +38,6 @@ const memberStrategy = new LocalStrategy(
         }
     }
 );
-
-
-
 
 module.exports = {
     loginStrategy: loginStrategy,

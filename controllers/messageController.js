@@ -12,8 +12,8 @@ exports.get_all_msgs = [
     async (req, res) => {
         try {
             // Descending order by timestamp, most recent posts first
-            const allMessages = await Message.find().populate('author').sort({ timestamp: -1 });
-            res.render('members', { messages: allMessages });
+            const allMessages = await Message.find().populate('author').sort({ createdAt: -1 });
+            res.render('members', { messages: allMessages, user: req.user });
         } catch (error) {
             console.error(`Error retrieving messages: ${error}`);
             res.status(500).send('Internal Server Error');
@@ -38,27 +38,17 @@ exports.get_msg = [
 ];
 
 // POST create message
-exports.post_message = [
+exports.post_new_message = [
     passport.authenticate('memberStrategy', {
         failureRedirect: '/signup?error=message'
     }),
-    body('message').isLength({ min: 1 }).withMessage('Message must not be empty'),
-    body('author').exists().withMessage('Author is required'),
     async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
         try {
-            // Create and save new message
             const newMessage = new Message({
-                message: req.body.message,
-                author: req.user.id,
-                replies: [],
-                likes: 0,
+                message: req.body.messageInput,
+                author: req.user._id
             });
             await newMessage.save();
-            // View all messages with new messages at top
             res.redirect('/members');
         } catch (error) {
             console.error(`Error posting message: ${error}`);
