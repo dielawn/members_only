@@ -27,8 +27,9 @@ router.post('/user/membership', authMiddleware, userController.update_membership
 
 router.get('/members', messageController.get_all_msgs);
 router.post('/members', messageController.post_new_message);
+
 // PROTECTED ROUTES //    
-router.get('/user', authMiddleware, userController.redirect_to_user);
+router.get('/user/:id', authMiddleware, userController.get_user);
 
 // POST create message
 // router.post('/members', authMiddleware, messageController.post_message);

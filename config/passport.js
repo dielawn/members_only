@@ -1,6 +1,6 @@
 const passport = require('passport');
-const { loginStrategy, memberStrategy } = require('./strategy')
-const { User } = require('../schemas/userSchema'); 
+const { loginStrategy, memberStrategy } = require('./strategy');
+const User = require('../schemas/userSchema'); // Import the User model correctly
 
 // Use the login strategy
 passport.use('loginStrategy', loginStrategy);

@@ -8,15 +8,40 @@ exports.get_login = (req, res) => {
     res.render('login', { user: req.user });
 };
 
-exports.post_login = passport.authenticate('loginStrategy', {
-    successRedirect: '/user',
-    failureRedirect: '/login?error=message',
-    failureFlash: true
-});
+exports.post_login = (req, res, next) => {
+    passport.authenticate('loginStrategy', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.redirect('/login?error=message');
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect(`/user/${user._id}`);
+        });
+    })(req, res, next);
+};
 
 // Redirect to user page after successful login
 exports.redirect_to_user = (req, res) => {
-    res.redirect('/user');
+    const userId = req.user._id;
+    res.redirect(`/user/${userId}`);
+};
+
+exports.get_user = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.render('user', { user: user });
+    } catch (error) {
+        console.error(`Error retrieving user: ${error}`);
+        res.status(500).send('Internal Server Error');
+    }
 };
 
 // POST update user membership

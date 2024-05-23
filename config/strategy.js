@@ -1,4 +1,3 @@
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('../schemas/userSchema'); // Ensure this path is correct
