@@ -4,6 +4,15 @@ const Message = require('../schemas/messageSchema'); // Adjust the path as neces
 const passport = require('passport');
 require('../config/strategy').memberStrategy;
 
+const setFailureRedirect = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        req.failureRedirect = `/user/${req.user._id}/?error=message`;
+    } else {
+        req.failureRedirect = '/login';
+    }
+    next();
+};
+
 // GET read all messages
 exports.get_all_msgs = [
     passport.authenticate('memberStrategy', {
@@ -41,7 +50,7 @@ exports.get_msg = [
 
 // POST create message
 exports.post_new_message = [
-   
+    setFailureRedirect,
     (req, res, next) => {
         passport.authenticate('memberStrategy', (err, user, info) => {
             if (err) { return next(err); }

@@ -28,6 +28,11 @@ const memberStrategy = new LocalStrategy(
                 console.log('Incorrect username');
                 return done(null, false, { message: 'Incorrect username' });
             }
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                console.log('Incorrect password');
+                return done(null, false, { message: 'Incorrect password' });
+            }
             if (user.member) {
                 return done(null, user);
             } else {

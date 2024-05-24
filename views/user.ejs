@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-</head>
-<body>
-<div>
-    <h1>Welcome <%= user.username %></h1>   
-    <h3>Post a new message!</h3>
-     <form method="POST" action="/members">
-        <label for="messageInput">New Message: </label>
-        <textarea name="messageInput" id="messageInput"></textarea>
-        <button type="submit">Post Member Message</button>
-    </form>
-</div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome</title>
+    </head>
+    <body>
+        <div>
+            <h1>Welcome <%= user.username %></h1>   
+            <h3>Post a new message!</h3>
+            <form method="POST" action="/members">
+                <label for="messageInput">New Message: </label>
+                <textarea name="messageInput" id="messageInput"></textarea>
+                <button type="submit">Post Member Message</button>
+            </form>
+        </div>
 
-<div>
+        <div>
+            <% messages.forEach(message => { %>
+                <div>
+                    <p><strong>Author:</strong> <%= message.author.username %></p>
+                    <p><strong>Message:</strong> <%= message.message %></p>
+                    <p><strong>Timestamp:</strong> <%= message.createdAt %></p>
+                    <p><strong>Likes:</strong> <%= message.likes %></p>
+                    <p><strong>Replies:</strong> <%= message.replies.length %></p>
+                </div>
+                <hr>
+            <% }); %>   
+        </div>
 
-</div>
-
-<div>
-    <h3>Update Membership</h3> 
-    <p>Members can post and reply to posts!</p>
-    <form method="POST" action="/user/membership">
-        <label for="memberCB">Checked box indicates membership:</label>
-        <input type="checkbox" id="memberCB" name="isMember" value="true" <% if (user.member) { %> checked <% } %> >
-        <button type="submit">Save</button>
-    </form>
-</div>
-</body>
+        <div>
+            <h3>Update Membership</h3> 
+            <p>Members can post and reply to posts!</p>
+            <form method="POST" action="/user/membership">
+                <label for="memberCB">Checked box indicates membership:</label>
+                <input type="checkbox" id="memberCB" name="isMember" value="true" <% if (user.member) { %> checked <% } %> >
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </body>
 </html>

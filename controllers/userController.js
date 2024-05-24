@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 const passport = require('../config/passport'); // Adjust the path to your strategy file
 const bcrypt = require('bcrypt');
 const User = require('../schemas/userSchema'); // Import the User model
+const Message = require('../schemas/messageSchema')
 
 // GET login page
 exports.get_login = (req, res) => {
@@ -26,9 +27,20 @@ exports.post_login = (req, res, next) => {
 };
 
 // Redirect to user page after successful login
-exports.redirect_to_user = (req, res) => {
-    const userId = req.user._id;
-    res.redirect(`/user/${userId}`);
+exports.redirect_to_user = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const userMessages = await Message.find({ author: user._id }).populate('author', 'username');
+
+        res.render('user', { user: user, messages: userMessages });
+    } catch (error) {
+        console.error(`Error retrieving user: ${error}`);
+        res.status(500).send('Internal Server Error');
+    }
 };
 
 exports.get_user = async (req, res) => {
@@ -37,12 +49,16 @@ exports.get_user = async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found');
         }
-        res.render('user', { user: user });
+
+        const userMessages = await Message.find({ author: user._id }).populate('author', 'username');
+
+        res.render('user', { user: user, messages: userMessages });
     } catch (error) {
         console.error(`Error retrieving user: ${error}`);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 // POST update user membership
 exports.update_membership = async (req, res) => {
