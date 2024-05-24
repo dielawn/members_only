@@ -20,7 +20,7 @@ router.get('/register', userController.user_form);
 router.post('/register', userController.create_user);
 
 // UPDATE MEMBERSHIP STATUS
-router.post('/user/membership', authMiddleware, userController.update_membership);
+router.post('/user/:id/membership', authMiddleware, userController.update_membership);
 
 // MESSAGE BOARD //
 // Read all messages by all authors

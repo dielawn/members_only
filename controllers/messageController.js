@@ -37,11 +37,21 @@ exports.get_msg = [
     }
 ];
 
+// Middleware to set dynamic failureRedirect URL
+
 // POST create message
 exports.post_new_message = [
-    passport.authenticate('memberStrategy', {
-        failureRedirect: '/signup?error=message'
-    }),
+   
+    (req, res, next) => {
+        passport.authenticate('memberStrategy', (err, user, info) => {
+            if (err) { return next(err); }
+            if (!user) { return res.redirect(req.failureRedirect); }
+            req.logIn(user, (err) => {
+                if (err) { return next(err); }
+                next();
+            });
+        })(req, res, next);
+    },
     async (req, res) => {
         try {
             const newMessage = new Message({
@@ -87,3 +97,5 @@ exports.update_replies = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+

@@ -25,14 +25,17 @@ const memberStrategy = new LocalStrategy(
         try {
             const user = await User.findOne({ username: username });
             if (!user) {
+                console.log('Incorrect username');
                 return done(null, false, { message: 'Incorrect username' });
             }
             if (user.member) {
                 return done(null, user);
             } else {
+                console.log('User is not a member');
                 return done(null, false, { message: 'Sign up!' });
             }
         } catch (err) {
+            console.log(`Error in member strategy: ${err}`);
             return done(err);
         }
     }

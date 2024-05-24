@@ -6,6 +6,28 @@
     <title>Welcome</title>
 </head>
 <body>
- <h1>Welcome <%= user.username %></h1>   
+<div>
+    <h1>Welcome <%= user.username %></h1>   
+    <h3>Post a new message!</h3>
+     <form method="POST" action="/members">
+        <label for="messageInput">New Message: </label>
+        <textarea name="messageInput" id="messageInput"></textarea>
+        <button type="submit">Post Member Message</button>
+    </form>
+</div>
+
+<div>
+
+</div>
+
+<div>
+    <h3>Update Membership</h3> 
+    <p>Members can post and reply to posts!</p>
+    <form method="POST" action="/user/membership">
+        <label for="memberCB">Checked box indicates membership:</label>
+        <input type="checkbox" id="memberCB" name="isMember" value="true" <% if (user.member) { %> checked <% } %> >
+        <button type="submit">Save</button>
+    </form>
+</div>
 </body>
 </html>
