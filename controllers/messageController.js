@@ -1,5 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const Message = require('../schemas/messageSchema'); // Adjust the path as necessary
+const User = require('../schemas/userSchema');
 
 const passport = require('passport');
 require('../config/strategy').memberStrategy;
@@ -15,9 +16,7 @@ const setFailureRedirect = (req, res, next) => {
 
 // GET read all messages
 exports.get_all_msgs = [
-    passport.authenticate('memberStrategy', {
-        failureRedirect: '/signup?error=message'
-    }),
+   
     async (req, res) => {
         try {
             // Descending order by timestamp, most recent posts first
@@ -108,3 +107,18 @@ exports.update_replies = async (req, res) => {
 };
 
 
+// GET Message page
+exports.get_user_messages = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const messages = await Message.find({ author: userId }).populate('author').exec();
+        const user = await User.findById(userId); // Ensure User model is imported
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.render('user', { user: user, messages: messages });
+    } catch (error) {
+        console.error(`Error retrieving messages: ${error}`);
+        res.status(500).send('Internal Server Error');
+    }
+};

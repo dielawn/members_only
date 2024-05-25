@@ -16,8 +16,11 @@
             </form>
         </div>
 
+        <a href="/members">View all posts.</a> <
+
         <div>
             <% messages.forEach(message => { %>
+                <hr>
                 <div>
                     <p><strong>Author:</strong> <%= message.author.username %></p>
                     <p><strong>Message:</strong> <%= message.message %></p>

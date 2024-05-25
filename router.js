@@ -21,10 +21,12 @@ router.post('/user/membership', authMiddleware, userController.update_membership
 
 // MESSAGE BOARD //
 // Read all messages by all authors
-router.get('/members', messageController.get_all_msgs);
+router.get('/members', messageController.get_all_msgs); // Route for displaying all messages
 router.post('/members', messageController.post_new_message);
 
 // PROTECTED ROUTES //    
 router.get('/user/:id', authMiddleware, userController.get_user);
+router.get('/user/:id/message', authMiddleware, messageController.get_user_messages); // Route for displaying specific user's messages
+
 
 module.exports = router;
